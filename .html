@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To-Do List</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+  }
+
+  .container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  textarea, input[type="date"], button {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  button {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  tr:hover {
+    background-color: #f5f5f5;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>To-Do List</h1>
+  <form id="todo-form">
+    <textarea id="task" placeholder="Enter your task..." required></textarea>
+    <input type="date" id="due-date" required>
+    <button type="submit">Add Task</button>
+  </form>
+  <table id="todo-list">
+    <thead>
+      <tr>
+        <th>Task</th>
+        <th>Due Date</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="todo-items"></tbody>
+  </table>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('todo-form');
+    const taskInput = document.getElementById('task');
+    const dateInput = document.getElementById('due-date');
+    const todoList = document.getElementById('todo-items');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const task = taskInput.value.trim();
+      const dueDate = dateInput.value;
+      if (task === '' || dueDate === '') return;
+      addTaskToList(task, dueDate);
+      taskInput.value = '';
+      dateInput.value = '';
+    });
+
+    function addTaskToList(task, dueDate) {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${task}</td>
+        <td>${dueDate}</td>
+        <td><button class="move-down-btn">Move Down</button></td>
+      `;
+      todoList.appendChild(row);
+
+      const moveDownBtn = row.querySelector('.move-down-btn');
+      moveDownBtn.addEventListener('click', function() {
+        const currentRow = this.parentNode.parentNode;
+        const nextRow = currentRow.nextElementSibling;
+        if (nextRow) {
+          todoList.insertBefore(nextRow, currentRow);
+        }
+      });
+    }
+  });
+</script>
+
+</body>
+</html>
